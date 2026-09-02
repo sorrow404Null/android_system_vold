@@ -776,6 +776,8 @@ bool keystore::Reinstall_User_Key(const userid_t user_id) {
 		printf("No cached CE secret for user %i\n", user_id);
 		return false;
 	}
+	// Force a reinstall in case vold still thinks CE is unlocked from before a /data remount.
+	fscrypt_lock_ce_storage(user_id);
 	return Decrypt_CE_storage(user_id, secret->second);
 }
 
